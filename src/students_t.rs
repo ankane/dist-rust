@@ -38,7 +38,7 @@ impl StudentsT {
             }
             let a = n as f64 - 0.5;
             b = 48.0 * a * a;
-            y = a * y;
+            y *= a;
             y = (((((-0.4 * y - 3.3) * y - 24.0) * y - 85.5) / (0.8 * y * y + 100.0 + b) + y + 3.0) / b + 1.0) * y.sqrt();
             return start + sign * Normal::cdf(-y, 0.0, 1.0);
         }
@@ -71,7 +71,7 @@ impl StudentsT {
             j += 2;
             z = a;
             y = y * (j - 1) as f64 / (b * j as f64);
-            a = a + y / (n + j) as f64;
+            a += y / (n + j) as f64;
         }
         z = 0.0;
         y = 0.0;
@@ -130,7 +130,7 @@ impl StudentsT {
             if ni < 5 {
                 c += 0.3 * (n - 4.5) * (x + 0.6);
             }
-            c = (((0.05 * d * x - 5.0) * x - 7.0) * x - 2.0) * x + b + c;
+            c += (((0.05 * d * x - 5.0) * x - 7.0) * x - 2.0) * x + b;
             y = (((((0.4 * y + 6.3) * y + 36.0) * y + 94.5) / c - y - 3.0) / b + 1.0) * x;
             y = a * y * y;
             y = if y > 0.002 { y.exp() - 1.0 } else { 0.5 * y * y + y };
@@ -154,7 +154,7 @@ extern "C" {
 #[cfg(test)]
 mod tests {
     use super::StudentsT;
-    use std::f64::{NEG_INFINITY, INFINITY};
+    use std::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64) {
         if exp.is_finite() {

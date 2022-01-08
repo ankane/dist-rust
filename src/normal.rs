@@ -23,7 +23,7 @@ impl Normal {
 #[cfg(test)]
 mod tests {
     use super::Normal;
-    use std::f64::{NEG_INFINITY, INFINITY};
+    use std::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64) {
         if exp.is_finite() {
