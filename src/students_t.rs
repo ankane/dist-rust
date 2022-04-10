@@ -159,9 +159,9 @@ mod tests {
     use super::StudentsT;
     use std::f64::{INFINITY, NEG_INFINITY};
 
-    fn assert_in_delta(act: f64, exp: f64) {
+    fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {
-            assert!((exp - act).abs() < 0.0003, "{} != {}", act, exp);
+            assert!((exp - act).abs() < delta, "{} != {}", act, exp);
         } else {
             assert_eq!(act, exp);
         }
@@ -172,7 +172,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.03183, 0.06366, 0.15915, 0.31831, 0.15915, 0.06366, 0.03183];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::pdf(*input, 1), exp);
+            assert_in_delta(StudentsT::pdf(*input, 1), exp, 0.00001);
         }
     }
 
@@ -181,7 +181,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.02741, 0.06804, 0.19245, 0.35355, 0.19245, 0.06804, 0.02741];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::pdf(*input, 2), exp);
+            assert_in_delta(StudentsT::pdf(*input, 2), exp, 0.00001);
         }
     }
 
@@ -190,7 +190,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00678, 0.05685, 0.23799, 0.39563, 0.23799, 0.05685, 0.00678];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::pdf(*input, 30), exp);
+            assert_in_delta(StudentsT::pdf(*input, 30), exp, 0.00001);
         }
     }
 
@@ -199,7 +199,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::pdf(*input, 2.5), exp);
+            assert_in_delta(StudentsT::pdf(*input, 2.5), exp, 0.00001);
         }
     }
 
@@ -208,7 +208,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 1), exp);
+            assert_in_delta(StudentsT::cdf(*input, 1), exp, 0.00001);
         }
     }
 
@@ -217,7 +217,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.04773, 0.09175, 0.21132, 0.5, 0.78868, 0.90825, 0.95227];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 2), exp);
+            assert_in_delta(StudentsT::cdf(*input, 2), exp, 0.00001);
         }
     }
 
@@ -226,7 +226,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 30), exp);
+            assert_in_delta(StudentsT::cdf(*input, 30), exp, 0.0002);
         }
     }
 
@@ -235,7 +235,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 2.5), exp);
+            assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.0003);
         }
     }
 
@@ -244,7 +244,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -3.07768, -1.37638, -0.72654, -0.32492, 0.0, 0.32492, 0.72654, 1.37638, 3.07768, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 1), exp);
+            assert_in_delta(StudentsT::ppf(*input, 1), exp, 0.00001);
         }
     }
 
@@ -253,7 +253,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.88562, -1.06066, -0.61721, -0.28868, 0.0, 0.28868, 0.61721, 1.06066, 1.88562, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 2), exp);
+            assert_in_delta(StudentsT::ppf(*input, 2), exp, 0.00001);
         }
     }
 
@@ -262,7 +262,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 30), exp);
+            assert_in_delta(StudentsT::ppf(*input, 30), exp, 0.0002);
         }
     }
 
@@ -271,7 +271,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.73025, -1.01016, -0.59731, -0.28146, 0.0, 0.28146, 0.59731, 1.01016, 1.73025, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 2.5), exp);
+            assert_in_delta(StudentsT::ppf(*input, 2.5), exp, 0.0002);
         }
     }
 }

@@ -25,9 +25,9 @@ mod tests {
     use super::Normal;
     use std::f64::{INFINITY, NEG_INFINITY};
 
-    fn assert_in_delta(act: f64, exp: f64) {
+    fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {
-            assert!((exp - act).abs() < 0.0002, "{} != {}", act, exp);
+            assert!((exp - act).abs() < delta, "{} != {}", act, exp);
         } else {
             assert_eq!(act, exp);
         }
@@ -38,7 +38,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(Normal::pdf(*input, 0.0, 1.0), exp);
+            assert_in_delta(Normal::pdf(*input, 0.0, 1.0), exp, 0.00001);
         }
     }
 
@@ -47,7 +47,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(Normal::cdf(*input, 0.0, 1.0), exp);
+            assert_in_delta(Normal::cdf(*input, 0.0, 1.0), exp, 0.0002);
         }
     }
 
@@ -56,7 +56,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.28155, -0.84162, -0.5244, -0.25335, 0.0, 0.25335, 0.5244, 0.84162, 1.28155, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(Normal::ppf(*input, 0.0, 1.0), exp);
+            assert_in_delta(Normal::ppf(*input, 0.0, 1.0), exp, 0.0002);
         }
     }
 }
