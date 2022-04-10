@@ -4,18 +4,21 @@ use std::f64::consts::PI;
 pub struct StudentsT;
 
 impl StudentsT {
-    pub fn pdf(x: f64, n: u32) -> f64 {
-        assert!(n >= 1);
+    pub fn pdf<T: Into<f64>>(x: f64, n: T) -> f64 {
+        let n = n.into();
 
-        let n = n as f64;
+        assert!(n >= 1.0);
+
         gamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * gamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
     }
 
     // Hill, G. W. (1970).
     // Algorithm 395: Student's t-distribution.
     // Communications of the ACM, 13(10), 617-619.
-    pub fn cdf(x: f64, n: u32) -> f64 {
-        assert!(n >= 1);
+    pub fn cdf<T: Into<f64>>(x: f64, n: T) -> f64 {
+        let n = n.into();
+
+        assert!(n >= 1.0);
 
         let (start, sign) = if x < 0.0 {
             (0.0, 1.0)
@@ -23,25 +26,26 @@ impl StudentsT {
             (1.0, -1.0)
         };
 
-        // make n mutable
-        let mut n = n;
-
         let mut z = 1.0;
         let t = x * x;
-        let mut y = t / n as f64;
+        let mut y = t / n;
         let mut b = 1.0 + y;
 
-        if (n >= 20 && t < n as f64) || n > 200 {
+        if n > n.floor() || (n >= 20.0 && t < n) || n > 200.0 {
             // asymptotic series for large or noninteger n
             if y > 10e-6 {
                 y = b.ln();
             }
-            let a = n as f64 - 0.5;
+            let a = n - 0.5;
             b = 48.0 * a * a;
             y *= a;
             y = (((((-0.4 * y - 3.3) * y - 24.0) * y - 85.5) / (0.8 * y * y + 100.0 + b) + y + 3.0) / b + 1.0) * y.sqrt();
             return start + sign * Normal::cdf(-y, 0.0, 1.0);
         }
+
+        // make n mutable and int
+        // n is int between 1 and 200 if made it here
+        let mut n = n as u8;
 
         if n < 20 && t < 4.0 {
             // nested summation of cosine series
@@ -89,9 +93,11 @@ impl StudentsT {
     // Hill, G. W. (1970).
     // Algorithm 396: Student's t-quantiles.
     // Communications of the ACM, 13(10), 619-620.
-    pub fn ppf(p: f64, n: u32) -> f64 {
+    pub fn ppf<T: Into<f64>>(p: f64, n: T) -> f64 {
+        let n = n.into();
+
         assert!(p >= 0.0 && p <= 1.0);
-        assert!(n >= 1);
+        assert!(n >= 1.0);
 
         // distribution is symmetric
         let (sign, p) = if p < 0.5 {
@@ -103,19 +109,16 @@ impl StudentsT {
         // two-tail to one-tail
         let p = 2.0 * (1.0 - p);
 
-        if n == 2 {
+        if n == 2.0 {
             return sign * (2.0 / (p * (2.0 - p)) - 2.0).sqrt();
         }
 
         let half_pi = PI / 2.0;
 
-        if n == 1 {
+        if n == 1.0 {
             let p = p * half_pi;
             return sign * p.cos() / p.sin();
         }
-
-        let ni = n;
-        let n = n as f64;
 
         let a = 1.0 / (n - 0.5);
         let b = 48.0 / (a * a);
@@ -127,7 +130,7 @@ impl StudentsT {
             // asymptotic inverse expansion about normal
             x = Normal::ppf(p * 0.5, 0.0, 1.0);
             y = x * x;
-            if ni < 5 {
+            if n < 5.0 {
                 c += 0.3 * (n - 4.5) * (x + 0.6);
             }
             c += (((0.05 * d * x - 5.0) * x - 7.0) * x - 2.0) * x + b;
@@ -158,7 +161,7 @@ mod tests {
 
     fn assert_in_delta(act: f64, exp: f64) {
         if exp.is_finite() {
-            assert!((exp - act).abs() < 0.0002, "{} != {}", act, exp);
+            assert!((exp - act).abs() < 0.0003, "{} != {}", act, exp);
         } else {
             assert_eq!(act, exp);
         }
@@ -192,6 +195,15 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_non_integer() {
+        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
+        let expected = [0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::pdf(*input, 2.5), exp);
+        }
+    }
+
+    #[test]
     fn test_cdf_one() {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758];
@@ -219,6 +231,15 @@ mod tests {
     }
 
     #[test]
+    fn test_cdf_non_integer() {
+        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
+        let expected = [0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::cdf(*input, 2.5), exp);
+        }
+    }
+
+    #[test]
     fn test_ppf_one() {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -3.07768, -1.37638, -0.72654, -0.32492, 0.0, 0.32492, 0.72654, 1.37638, 3.07768, INFINITY];
@@ -242,6 +263,15 @@ mod tests {
         let expected = [NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::ppf(*input, 30), exp);
+        }
+    }
+
+    #[test]
+    fn test_ppf_non_integer() {
+        let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+        let expected = [NEG_INFINITY, -1.73025, -1.01016, -0.59731, -0.28146, 0.0, 0.28146, 0.59731, 1.01016, 1.73025, INFINITY];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::ppf(*input, 2.5), exp);
         }
     }
 }
