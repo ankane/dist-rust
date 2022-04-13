@@ -23,7 +23,6 @@ impl Normal {
 #[cfg(test)]
 mod tests {
     use super::Normal;
-    use std::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {
@@ -36,7 +35,9 @@ mod tests {
     #[test]
     fn test_pdf() {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443];
+        let expected = [
+            0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443,
+        ];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::pdf(*input, 0.0, 1.0), exp, 0.00001);
         }
@@ -54,7 +55,19 @@ mod tests {
     #[test]
     fn test_ppf() {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
-        let expected = [NEG_INFINITY, -1.28155, -0.84162, -0.5244, -0.25335, 0.0, 0.25335, 0.5244, 0.84162, 1.28155, INFINITY];
+        let expected = [
+            f64::NEG_INFINITY,
+            -1.28155,
+            -0.84162,
+            -0.5244,
+            -0.25335,
+            0.0,
+            0.25335,
+            0.5244,
+            0.84162,
+            1.28155,
+            f64::INFINITY,
+        ];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::ppf(*input, 0.0, 1.0), exp, 0.0002);
         }

@@ -3,6 +3,7 @@
 //! [View the docs](https://github.com/ankane/dist-rust)
 
 mod erf;
+pub mod gamma;
 mod normal;
 mod students_t;
 
