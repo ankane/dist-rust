@@ -1,4 +1,4 @@
-## 0.1.1 (unreleased)
+## 0.1.1 (2022-04-20)
 
 - Added support for non-integer degrees of freedom
 
