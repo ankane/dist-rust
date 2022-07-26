@@ -1,4 +1,4 @@
-use crate::erf::{safe_erf as erf, inverse_erf};
+use crate::erf::inverse_erf;
 use std::f64::consts::{E, PI};
 
 pub struct Normal;
@@ -10,7 +10,7 @@ impl Normal {
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
-        0.5 * (1.0 + erf((x - mean) / (std_dev * std_dev * 2.0_f64.sqrt())))
+        0.5 * (1.0 + erf2((x - mean) / (std_dev * std_dev * 2.0_f64.sqrt())))
     }
 
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
@@ -18,6 +18,16 @@ impl Normal {
 
         mean + (std_dev * std_dev) * 2.0_f64.sqrt() * inverse_erf(2.0 * p - 1.0)
     }
+}
+
+// TODO implement in Rust
+#[inline]
+pub fn erf2(x: f64) -> f64 {
+    unsafe { erf(x) }
+}
+
+extern "C" {
+    fn erf(x: f64) -> f64;
 }
 
 #[cfg(test)]

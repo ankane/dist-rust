@@ -5,16 +5,6 @@
 
 use std::f64::consts::PI;
 
-// TODO implement in Rust
-#[inline]
-pub fn safe_erf(x: f64) -> f64 {
-    unsafe { erf(x) }
-}
-
-extern "C" {
-    fn erf(x: f64) -> f64;
-}
-
 pub fn inverse_erf(x: f64) -> f64 {
     let (sign, x) = if x < 0.0 {
         (-1.0, -x)
