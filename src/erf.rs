@@ -5,16 +5,14 @@
 
 use std::f64::consts::PI;
 
-pub fn erf(x: f64) -> f64 {
-    let (sign, x) = if x < 0.0 {
-        (-1.0, -x)
-    } else {
-        (1.0, x)
-    };
+// TODO implement in Rust
+#[inline]
+pub fn safe_erf(x: f64) -> f64 {
+    unsafe { erf(x) }
+}
 
-    let a = 0.14;
-    let x2 = x * x;
-    sign * (1.0 - (-x2 * (4.0 / PI + a * x2) / (1.0 + a * x2)).exp()).sqrt()
+extern "C" {
+    fn erf(x: f64) -> f64;
 }
 
 pub fn inverse_erf(x: f64) -> f64 {

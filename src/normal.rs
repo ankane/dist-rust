@@ -1,4 +1,4 @@
-use crate::erf::{erf, inverse_erf};
+use crate::erf::{safe_erf as erf, inverse_erf};
 use std::f64::consts::{E, PI};
 
 pub struct Normal;
@@ -47,7 +47,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(Normal::cdf(*input, 0.0, 1.0), exp, 0.0002);
+            assert_in_delta(Normal::cdf(*input, 0.0, 1.0), exp, 0.00001);
         }
     }
 
