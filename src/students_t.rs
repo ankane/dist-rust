@@ -226,7 +226,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 30), exp, 0.0002);
+            assert_in_delta(StudentsT::cdf(*input, 30), exp, 0.00001);
         }
     }
 
@@ -235,7 +235,7 @@ mod tests {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.0003);
+            assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
         }
     }
 

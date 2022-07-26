@@ -1,6 +1,6 @@
 ## 0.2.0 (unreleased)
 
-- Improved accuracy of `Normal::cdf`
+- Improved accuracy of `Normal::cdf` and `StudentsT::cdf`
 
 ## 0.1.1 (2022-04-20)
 
