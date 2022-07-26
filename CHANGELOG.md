@@ -1,4 +1,4 @@
-## 0.2.0 (unreleased)
+## 0.1.2 (2022-07-26)
 
 - Improved accuracy of `Normal::cdf` and `StudentsT::cdf`
 - Fixed bug when `std_dev` is not one
