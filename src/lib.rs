@@ -2,6 +2,7 @@
 //!
 //! [View the docs](https://github.com/ankane/dist-rust)
 
+#![forbid(unsafe_code)]
 #![no_std]
 
 mod erf;
