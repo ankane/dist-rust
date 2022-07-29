@@ -86,4 +86,10 @@ mod tests {
             assert_in_delta(Normal::ppf(*input, 1.0, 2.0), exp, 0.0004);
         }
     }
+
+    #[test]
+    #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
+    fn test_ppf_negative_p() {
+        Normal::ppf(-1.0, 0.0, 1.0);
+    }
 }

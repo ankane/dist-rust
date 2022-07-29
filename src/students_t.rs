@@ -265,4 +265,16 @@ mod tests {
             assert_in_delta(StudentsT::ppf(*input, 2.5), exp, 0.0002);
         }
     }
+
+    #[test]
+    #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
+    fn test_ppf_negative_p() {
+        StudentsT::ppf(-1.0, 1);
+    }
+
+    #[test]
+    #[should_panic(expected = "assertion failed: n >= 1.0")]
+    fn test_ppf_zero_n() {
+        StudentsT::ppf(0.5, 0);
+    }
 }
