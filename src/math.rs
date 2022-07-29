@@ -1,14 +1,16 @@
-extern "C" {
-    fn erf(x: f64) -> f64;
-    fn tgamma(x: f64) -> f64;
+mod c {
+    extern "C" {
+        pub fn erf(x: f64) -> f64;
+        pub fn tgamma(x: f64) -> f64;
+    }
 }
 
 #[inline]
-pub fn erf2(x: f64) -> f64 {
-    unsafe { erf(x) }
+pub fn erf(x: f64) -> f64 {
+    unsafe { c::erf(x) }
 }
 
 #[inline]
-pub fn gamma(x: f64) -> f64 {
-    unsafe { tgamma(x) }
+pub fn tgamma(x: f64) -> f64 {
+    unsafe { c::tgamma(x) }
 }

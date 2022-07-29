@@ -1,4 +1,4 @@
-use crate::math::gamma;
+use crate::math::tgamma;
 use crate::Normal;
 use std::f64::consts::PI;
 
@@ -10,7 +10,7 @@ impl StudentsT {
 
         assert!(n >= 1.0);
 
-        gamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * gamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
+        tgamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * tgamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
     }
 
     // Hill, G. W. (1970).
