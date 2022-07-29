@@ -2,7 +2,7 @@
 
 PDF, CDF, and percent-point/quantile functions for the normal and Student’s t distributions
 
-:tada: Works with [no_std](https://docs.rust-embedded.org/book/intro/no-std.html)
+:tada: Works with `#![no_std]`
 
 [![Build Status](https://github.com/ankane/dist-rust/workflows/build/badge.svg?branch=master)](https://github.com/ankane/dist-rust/actions)
 
