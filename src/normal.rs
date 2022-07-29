@@ -6,15 +6,23 @@ pub struct Normal;
 
 impl Normal {
     pub fn pdf(x: f64, mean: f64, std_dev: f64) -> f64 {
+        // TODO uncomment in 0.2.0
+        // assert!(std_dev >= 0.0);
+
         (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * ((x - mean) / std_dev).powf(2.0))
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
+        // TODO uncomment in 0.2.0
+        // assert!(std_dev >= 0.0);
+
         0.5 * (1.0 + erf((x - mean) / (std_dev * 2.0_f64.sqrt())))
     }
 
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
         assert!(p >= 0.0 && p <= 1.0);
+        // TODO uncomment in 0.2.0
+        // assert!(std_dev >= 0.0);
 
         mean + std_dev * 2.0_f64.sqrt() * inverse_erf(2.0 * p - 1.0)
     }
@@ -91,5 +99,12 @@ mod tests {
     #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
     fn test_ppf_negative_p() {
         Normal::ppf(-1.0, 0.0, 1.0);
+    }
+
+    #[test]
+    // TODO uncomment in 0.2.0
+    // #[should_panic(expected = "assertion failed: std_dev >= 0.0")]
+    fn test_ppf_negative_std_dev() {
+        Normal::ppf(0.5, 0.0, -1.0);
     }
 }
