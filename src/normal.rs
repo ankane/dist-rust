@@ -1,4 +1,5 @@
 use crate::erf::inverse_erf;
+use crate::math::erf2;
 use std::f64::consts::{E, PI};
 
 pub struct Normal;
@@ -17,16 +18,6 @@ impl Normal {
 
         mean + std_dev * 2.0_f64.sqrt() * inverse_erf(2.0 * p - 1.0)
     }
-}
-
-// TODO implement in Rust
-#[inline]
-pub fn erf2(x: f64) -> f64 {
-    unsafe { erf(x) }
-}
-
-extern "C" {
-    fn erf(x: f64) -> f64;
 }
 
 #[cfg(test)]

@@ -1,3 +1,4 @@
+use crate::math::gamma;
 use crate::Normal;
 use std::f64::consts::PI;
 
@@ -142,16 +143,6 @@ impl StudentsT {
         }
         sign * (n * y).sqrt()
     }
-}
-
-// TODO implement in Rust
-#[inline]
-fn gamma(x: f64) -> f64 {
-    unsafe { tgamma(x) }
-}
-
-extern "C" {
-    fn tgamma(x: f64) -> f64;
 }
 
 #[cfg(test)]
