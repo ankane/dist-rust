@@ -13,4 +13,3 @@ jobs:
       with:
         toolchain: stable
     - run: cargo test
-    - run: cargo test --features libm

@@ -1,34 +1,30 @@
 use crate::erf::inverse_erf;
-use std::f64::consts::{E, PI};
-
-#[cfg(feature = "libm")]
-use libm::erf;
-
-#[cfg(not(feature = "libm"))]
-use crate::math::erf;
+use core::f64::consts::{E, PI};
+use libm::{erf, pow, sqrt};
 
 pub struct Normal;
 
 impl Normal {
     pub fn pdf(x: f64, mean: f64, std_dev: f64) -> f64 {
-        (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * ((x - mean) / std_dev).powf(2.0))
+        let n = (x - mean) / std_dev;
+        (1.0 / (std_dev * sqrt(2.0 * PI))) * pow(E, -0.5 * n * n)
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
-        0.5 * (1.0 + erf((x - mean) / (std_dev * 2.0_f64.sqrt())))
+        0.5 * (1.0 + erf((x - mean) / (std_dev * sqrt(2.0))))
     }
 
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
         assert!(p >= 0.0 && p <= 1.0);
 
-        mean + std_dev * 2.0_f64.sqrt() * inverse_erf(2.0 * p - 1.0)
+        mean + std_dev * sqrt(2.0) * inverse_erf(2.0 * p - 1.0)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::Normal;
-    use std::f64::{INFINITY, NEG_INFINITY};
+    use core::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {
