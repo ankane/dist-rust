@@ -1,6 +1,11 @@
 use crate::erf::inverse_erf;
-use crate::math::erf;
 use std::f64::consts::{E, PI};
+
+#[cfg(feature = "libm")]
+use libm::erf;
+
+#[cfg(not(feature = "libm"))]
+use crate::math::erf;
 
 pub struct Normal;
 
