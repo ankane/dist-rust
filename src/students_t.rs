@@ -195,6 +195,12 @@ mod tests {
     }
 
     #[test]
+    #[should_panic(expected = "assertion failed: n >= 1.0")]
+    fn test_pdf_zero_n() {
+        StudentsT::pdf(0.5, 0);
+    }
+
+    #[test]
     fn test_cdf_one() {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758];
@@ -228,6 +234,12 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
         }
+    }
+
+    #[test]
+    #[should_panic(expected = "assertion failed: n >= 1.0")]
+    fn test_cdf_zero_n() {
+        StudentsT::cdf(0.5, 0);
     }
 
     #[test]
