@@ -8,7 +8,7 @@ impl StudentsT {
     pub fn pdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(n >= 1.0);
+        assert!(n > 0.0);
 
         tgamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * tgamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
     }
@@ -203,6 +203,15 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_less_than_one() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02963, 0.0519, 0.1183, 0.26968, 0.1183, 0.0519, 0.02963, 0.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::pdf(*input, 0.5), exp, 0.00001);
+        }
+    }
+
+    #[test]
     fn test_pdf_nan() {
         assert!(StudentsT::pdf(f64::NAN, 1).is_nan());
         // TODO uncomment in 0.2.0
@@ -210,7 +219,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: n >= 1.0")]
+    #[should_panic(expected = "assertion failed: n > 0.0")]
     fn test_pdf_zero_n() {
         StudentsT::pdf(0.5, 0);
     }
