@@ -9,7 +9,8 @@ impl Normal {
         // TODO uncomment in 0.2.0
         // assert!(std_dev >= 0.0);
 
-        (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * ((x - mean) / std_dev).powf(2.0))
+        let n = (x - mean) / std_dev;
+        (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * n * n)
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
