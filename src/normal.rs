@@ -67,6 +67,17 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_infinite_mean() {
+        assert_in_delta(Normal::pdf(0.0, NEG_INFINITY, 1.0), 0.0, 0.00001);
+        assert_in_delta(Normal::pdf(0.0, INFINITY, 1.0), 0.0, 0.00001);
+    }
+
+    #[test]
+    fn test_pdf_infinite_std_dev() {
+        assert_in_delta(Normal::pdf(0.0, 0.0, INFINITY), 0.0, 0.00001);
+    }
+
+    #[test]
     fn test_pdf_nan() {
         assert!(Normal::pdf(f64::NAN, 0.0, 1.0).is_nan());
         assert!(Normal::pdf(0.0, f64::NAN, 1.0).is_nan());
@@ -100,6 +111,17 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::cdf(*input, 1.0, 2.0), exp, 0.00001);
         }
+    }
+
+    #[test]
+    fn test_cdf_infinite_mean() {
+        assert_in_delta(Normal::cdf(1.0, NEG_INFINITY, 1.0), 1.0, 0.00001);
+        assert_in_delta(Normal::cdf(1.0, INFINITY, 1.0), 0.0, 0.00001);
+    }
+
+    #[test]
+    fn test_cdf_infinite_std_dev() {
+        assert_in_delta(Normal::cdf(1.0, 0.0, INFINITY), 0.5, 0.00001);
     }
 
     #[test]
