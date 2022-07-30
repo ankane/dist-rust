@@ -7,7 +7,9 @@ pub struct Normal;
 impl Normal {
     pub fn pdf(x: f64, mean: f64, std_dev: f64) -> f64 {
         // TODO uncomment in 0.2.0
-        // assert!(std_dev >= 0.0);
+        // if std_dev <= 0.0 {
+        //     return f64::NAN;
+        // }
 
         let n = (x - mean) / std_dev;
         (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * n * n)
@@ -15,7 +17,9 @@ impl Normal {
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
         // TODO uncomment in 0.2.0
-        // assert!(std_dev >= 0.0);
+        // if std_dev <= 0.0 {
+        //     return f64::NAN;
+        // }
 
         0.5 * (1.0 + erf((x - mean) / (std_dev * SQRT_2)))
     }
@@ -23,7 +27,9 @@ impl Normal {
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
         assert!(p >= 0.0 && p <= 1.0);
         // TODO uncomment in 0.2.0
-        // assert!(std_dev >= 0.0);
+        // if p < 0.0 || p > 1.0 || std_dev <= 0.0 {
+        //     return f64::NAN;
+        // }
 
         mean + std_dev * SQRT_2 * inverse_erf(2.0 * p - 1.0)
     }
@@ -61,6 +67,17 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_zero_std_dev() {
+        assert!(Normal::pdf(0.0, 0.0, 0.0).is_nan());
+    }
+
+    #[test]
+    fn test_pdf_negative_std_dev() {
+        // TODO return NAN in 0.2.0
+        assert!(Normal::pdf(0.0, 0.0, -1.0).is_sign_negative());
+    }
+
+    #[test]
     fn test_cdf() {
         let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
         let expected = [0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865];
@@ -76,6 +93,17 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::cdf(*input, 1.0, 2.0), exp, 0.00001);
         }
+    }
+
+    #[test]
+    fn test_cdf_zero_std_dev() {
+        assert!(Normal::cdf(0.0, 0.0, 0.0).is_nan());
+    }
+
+    #[test]
+    fn test_cdf_negative_std_dev() {
+        // TODO return NAN in 0.2.0
+        assert_in_delta(Normal::cdf(0.0, 0.0, -1.0), 0.5, 0.00001);
     }
 
     #[test]
@@ -99,13 +127,19 @@ mod tests {
     #[test]
     #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
     fn test_ppf_negative_p() {
+        // TODO return NAN in 0.2.0
         Normal::ppf(-1.0, 0.0, 1.0);
     }
 
     #[test]
-    // TODO uncomment in 0.2.0
-    // #[should_panic(expected = "assertion failed: std_dev >= 0.0")]
+    fn test_ppf_zero_std_dev() {
+        // TODO return NAN in 0.2.0
+        assert_in_delta(Normal::ppf(0.5, 0.0, 0.0), 0.0, 0.00001);
+    }
+
+    #[test]
     fn test_ppf_negative_std_dev() {
-        Normal::ppf(0.5, 0.0, -1.0);
+        // TODO return NAN in 0.2.0
+        assert_in_delta(Normal::ppf(0.5, 0.0, -1.0), 0.0, 0.00001);
     }
 }
