@@ -1,5 +1,6 @@
 ## 0.1.3 (unreleased)
 
+- Added support for `df` between zero and one to `StudentsT::pdf`
 - Fixed error with `StudentsT::cdf` when `x` is infinite or NaN
 
 ## 0.1.2 (2022-07-26)
