@@ -168,8 +168,8 @@ mod tests {
 
     #[test]
     fn test_pdf_one() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.03183, 0.06366, 0.15915, 0.31831, 0.15915, 0.06366, 0.03183];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.03183, 0.06366, 0.15915, 0.31831, 0.15915, 0.06366, 0.03183, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 1), exp, 0.00001);
         }
@@ -177,8 +177,8 @@ mod tests {
 
     #[test]
     fn test_pdf_two() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.02741, 0.06804, 0.19245, 0.35355, 0.19245, 0.06804, 0.02741];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02741, 0.06804, 0.19245, 0.35355, 0.19245, 0.06804, 0.02741, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 2), exp, 0.00001);
         }
@@ -186,8 +186,8 @@ mod tests {
 
     #[test]
     fn test_pdf_thirty() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00678, 0.05685, 0.23799, 0.39563, 0.23799, 0.05685, 0.00678];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00678, 0.05685, 0.23799, 0.39563, 0.23799, 0.05685, 0.00678, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 30), exp, 0.00001);
         }
@@ -195,17 +195,11 @@ mod tests {
 
     #[test]
     fn test_pdf_non_integer() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 2.5), exp, 0.00001);
         }
-    }
-
-    #[test]
-    fn test_pdf_infinite() {
-        assert_in_delta(StudentsT::pdf(NEG_INFINITY, 1), 0.0, 0.00001);
-        assert_in_delta(StudentsT::pdf(INFINITY, 1), 0.0, 0.00001);
     }
 
     #[test]
@@ -223,8 +217,8 @@ mod tests {
 
     #[test]
     fn test_cdf_one() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 1), exp, 0.00001);
         }
@@ -232,8 +226,8 @@ mod tests {
 
     #[test]
     fn test_cdf_two() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.04773, 0.09175, 0.21132, 0.5, 0.78868, 0.90825, 0.95227];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.04773, 0.09175, 0.21132, 0.5, 0.78868, 0.90825, 0.95227, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2), exp, 0.00001);
         }
@@ -241,8 +235,8 @@ mod tests {
 
     #[test]
     fn test_cdf_thirty() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 30), exp, 0.00001);
         }
@@ -250,17 +244,11 @@ mod tests {
 
     #[test]
     fn test_cdf_non_integer() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
         }
-    }
-
-    #[test]
-    fn test_cdf_infinite() {
-        assert_in_delta(StudentsT::cdf(NEG_INFINITY, 1.0), 0.0, 0.00001);
-        assert_in_delta(StudentsT::cdf(INFINITY, 1.0), 1.0, 0.00001);
     }
 
     #[test]

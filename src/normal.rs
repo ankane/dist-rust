@@ -50,8 +50,8 @@ mod tests {
 
     #[test]
     fn test_pdf() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::pdf(*input, 0.0, 1.0), exp, 0.00001);
         }
@@ -59,17 +59,11 @@ mod tests {
 
     #[test]
     fn test_pdf_mean_std_dev() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.027, 0.06476, 0.12099, 0.17603, 0.19947, 0.17603, 0.12099];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.027, 0.06476, 0.12099, 0.17603, 0.19947, 0.17603, 0.12099, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::pdf(*input, 1.0, 2.0), exp, 0.00001);
         }
-    }
-
-    #[test]
-    fn test_pdf_infinite() {
-        assert_in_delta(Normal::pdf(NEG_INFINITY, 0.0, 1.0), 0.0, 0.00001);
-        assert_in_delta(Normal::pdf(INFINITY, 0.0, 1.0), 0.0, 0.00001);
     }
 
     #[test]
@@ -92,8 +86,8 @@ mod tests {
 
     #[test]
     fn test_cdf() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::cdf(*input, 0.0, 1.0), exp, 0.00001);
         }
@@ -101,17 +95,11 @@ mod tests {
 
     #[test]
     fn test_cdf_mean_std_dev() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.02275, 0.06681, 0.15866, 0.30854, 0.5, 0.69146, 0.84134];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02275, 0.06681, 0.15866, 0.30854, 0.5, 0.69146, 0.84134, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::cdf(*input, 1.0, 2.0), exp, 0.00001);
         }
-    }
-
-    #[test]
-    fn test_cdf_infinite() {
-        assert_in_delta(Normal::cdf(NEG_INFINITY, 0.0, 1.0), 0.0, 0.00001);
-        assert_in_delta(Normal::cdf(INFINITY, 0.0, 1.0), 1.0, 0.00001);
     }
 
     #[test]
