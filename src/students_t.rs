@@ -19,6 +19,7 @@ impl StudentsT {
     pub fn cdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
+        // TODO support n > 0.0
         assert!(n >= 1.0);
 
         if x.is_nan() {
@@ -106,6 +107,7 @@ impl StudentsT {
         let n = n.into();
 
         assert!(p >= 0.0 && p <= 1.0);
+        // TODO support n > 0.0
         assert!(n >= 1.0);
 
         // distribution is symmetric
