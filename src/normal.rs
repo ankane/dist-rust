@@ -1,6 +1,6 @@
 use crate::erf::inverse_erf;
 use crate::math::erf;
-use std::f64::consts::{E, PI};
+use std::f64::consts::{E, PI, SQRT_2};
 
 pub struct Normal;
 
@@ -17,7 +17,7 @@ impl Normal {
         // TODO uncomment in 0.2.0
         // assert!(std_dev >= 0.0);
 
-        0.5 * (1.0 + erf((x - mean) / (std_dev * 2.0_f64.sqrt())))
+        0.5 * (1.0 + erf((x - mean) / (std_dev * SQRT_2)))
     }
 
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
@@ -25,7 +25,7 @@ impl Normal {
         // TODO uncomment in 0.2.0
         // assert!(std_dev >= 0.0);
 
-        mean + std_dev * 2.0_f64.sqrt() * inverse_erf(2.0 * p - 1.0)
+        mean + std_dev * SQRT_2 * inverse_erf(2.0 * p - 1.0)
     }
 }
 
