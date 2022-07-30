@@ -67,6 +67,13 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_nan() {
+        assert!(Normal::pdf(f64::NAN, 0.0, 1.0).is_nan());
+        assert!(Normal::pdf(0.0, f64::NAN, 1.0).is_nan());
+        assert!(Normal::pdf(0.0, 0.0, f64::NAN).is_nan());
+    }
+
+    #[test]
     fn test_pdf_zero_std_dev() {
         assert!(Normal::pdf(0.0, 0.0, 0.0).is_nan());
     }
@@ -96,6 +103,13 @@ mod tests {
     }
 
     #[test]
+    fn test_cdf_nan() {
+        assert!(Normal::cdf(f64::NAN, 0.0, 1.0).is_nan());
+        assert!(Normal::cdf(0.0, f64::NAN, 1.0).is_nan());
+        assert!(Normal::cdf(0.0, 0.0, f64::NAN).is_nan());
+    }
+
+    #[test]
     fn test_cdf_zero_std_dev() {
         assert!(Normal::cdf(0.0, 0.0, 0.0).is_nan());
     }
@@ -122,6 +136,14 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(Normal::ppf(*input, 1.0, 2.0), exp, 0.0004);
         }
+    }
+
+    #[test]
+    fn test_ppf_nan() {
+        // TODO uncomment in 0.2.0
+        // assert!(Normal::ppf(f64::NAN, 0.0, 1.0).is_nan());
+        assert!(Normal::ppf(0.0, f64::NAN, 1.0).is_nan());
+        assert!(Normal::ppf(0.0, 0.0, f64::NAN).is_nan());
     }
 
     #[test]
