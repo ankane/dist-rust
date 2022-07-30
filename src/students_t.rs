@@ -21,6 +21,14 @@ impl StudentsT {
 
         assert!(n >= 1.0);
 
+        if x.is_nan() {
+            return f64::NAN;
+        }
+
+        if !x.is_finite() {
+            return if x < 0.0 { 0.0 } else { 1.0 };
+        }
+
         let (start, sign) = if x < 0.0 {
             (0.0, 1.0)
         } else {
@@ -195,6 +203,19 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_infinite() {
+        assert_in_delta(StudentsT::pdf(NEG_INFINITY, 1), 0.0, 0.00001);
+        assert_in_delta(StudentsT::pdf(INFINITY, 1), 0.0, 0.00001);
+    }
+
+    #[test]
+    fn test_pdf_nan() {
+        assert!(StudentsT::pdf(f64::NAN, 1).is_nan());
+        // TODO uncomment in 0.2.0
+        // assert!(StudentsT::pdf(0.0, f64::NAN).is_nan());
+    }
+
+    #[test]
     #[should_panic(expected = "assertion failed: n >= 1.0")]
     fn test_pdf_zero_n() {
         StudentsT::pdf(0.5, 0);
@@ -234,6 +255,19 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
         }
+    }
+
+    #[test]
+    fn test_cdf_infinite() {
+        assert_in_delta(StudentsT::cdf(NEG_INFINITY, 1.0), 0.0, 0.00001);
+        assert_in_delta(StudentsT::cdf(INFINITY, 1.0), 1.0, 0.00001);
+    }
+
+    #[test]
+    fn test_cdf_nan() {
+        assert!(StudentsT::cdf(f64::NAN, 1.0).is_nan());
+        // TODO uncomment in 0.2.0
+        // assert!(StudentsT::cdf(0.0, f64::NAN).is_nan());
     }
 
     #[test]

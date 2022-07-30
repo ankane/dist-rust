@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Fixed error with `StudentsT::cdf` when `x` is infinite or NaN
+
 ## 0.1.2 (2022-07-26)
 
 - Improved accuracy of `Normal::cdf` and `StudentsT::cdf`
