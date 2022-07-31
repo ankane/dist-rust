@@ -10,6 +10,10 @@ impl StudentsT {
 
         assert!(n > 0.0);
 
+        if n == f64::INFINITY {
+            return Normal::pdf(x, 0.0, 1.0);
+        }
+
         tgamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * tgamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
     }
 
@@ -28,6 +32,10 @@ impl StudentsT {
 
         if !x.is_finite() {
             return if x < 0.0 { 0.0 } else { 1.0 };
+        }
+
+        if n == f64::INFINITY {
+            return Normal::cdf(x, 0.0, 1.0);
         }
 
         let (start, sign) = if x < 0.0 {
@@ -205,6 +213,15 @@ mod tests {
     }
 
     #[test]
+    fn test_pdf_infinity() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443, 0.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::pdf(*input, INFINITY), exp, 0.00001);
+        }
+    }
+
+    #[test]
     fn test_pdf_less_than_one() {
         let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
         let expected = [0.0, 0.02963, 0.0519, 0.1183, 0.26968, 0.1183, 0.0519, 0.02963, 0.0];
@@ -259,6 +276,15 @@ mod tests {
         let expected = [0.0, 0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
+        }
+    }
+
+    #[test]
+    fn test_cdf_infinity() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865, 1.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::cdf(*input, INFINITY), exp, 0.00001);
         }
     }
 

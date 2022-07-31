@@ -2,6 +2,7 @@
 
 - Added support for `df` between zero and one to `StudentsT::pdf`
 - Fixed error with `StudentsT::cdf` when `x` is infinite or NaN
+- Fixed bug with `StudentsT::pdf` and `StudentsT::cdf` when `df` is infinity
 
 ## 0.1.2 (2022-07-26)
 
