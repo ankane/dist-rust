@@ -7,7 +7,7 @@
 ## 0.1.2 (2022-07-26)
 
 - Improved accuracy of `Normal::cdf` and `StudentsT::cdf`
-- Fixed bug when `std_dev` is not one
+- Fixed bug with `Normal` functions when `std_dev` is not one
 
 ## 0.1.1 (2022-04-20)
 
