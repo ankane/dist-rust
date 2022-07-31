@@ -118,6 +118,10 @@ impl StudentsT {
         // TODO support n > 0.0
         assert!(n >= 1.0);
 
+        if n == f64::INFINITY {
+            return Normal::ppf(p, 0.0, 1.0);
+        }
+
         // distribution is symmetric
         let (sign, p) = if p < 0.5 {
             (-1.0, 1.0 - p)
@@ -334,6 +338,15 @@ mod tests {
         let expected = [NEG_INFINITY, -1.73025, -1.01016, -0.59731, -0.28146, 0.0, 0.28146, 0.59731, 1.01016, 1.73025, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::ppf(*input, 2.5), exp, 0.0002);
+        }
+    }
+
+    #[test]
+    fn test_ppf_infinity() {
+        let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+        let expected = [NEG_INFINITY, -1.28155, -0.84162, -0.5244, -0.25335, 0.0, 0.25335, 0.5244, 0.84162, 1.28155, INFINITY];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::ppf(*input, INFINITY), exp, 0.0002);
         }
     }
 
