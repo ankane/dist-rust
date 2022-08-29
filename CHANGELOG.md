@@ -1,3 +1,7 @@
+## 0.2.0 (unreleased)
+
+- Improved accuracy of `Normal::ppf` and `StudentsT::ppf`
+
 ## 0.1.3 (2022-07-31)
 
 - Added support for `df` between zero and one to `StudentsT::pdf`

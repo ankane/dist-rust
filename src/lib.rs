@@ -2,7 +2,6 @@
 //!
 //! [View the docs](https://github.com/ankane/dist-rust)
 
-mod erf;
 mod math;
 mod normal;
 mod students_t;

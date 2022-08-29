@@ -328,7 +328,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 30), exp, 0.0002);
+            assert_in_delta(StudentsT::ppf(*input, 30), exp, 0.00001);
         }
     }
 
@@ -346,7 +346,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.28155, -0.84162, -0.5244, -0.25335, 0.0, 0.25335, 0.5244, 0.84162, 1.28155, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, INFINITY), exp, 0.0002);
+            assert_in_delta(StudentsT::ppf(*input, INFINITY), exp, 0.00001);
         }
     }
 
