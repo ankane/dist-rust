@@ -11,7 +11,7 @@ PDF, CDF, and percent-point/quantile functions for the normal and Student’s t 
 Add this line to your application’s `Cargo.toml` under `[dependencies]`:
 
 ```toml
-distrs = "0.1"
+distrs = "0.2"
 ```
 
 ## Getting Started
