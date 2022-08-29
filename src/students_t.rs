@@ -115,7 +115,7 @@ impl StudentsT {
         let n = n.into();
 
         // TODO support n > 0.0
-        if p < 0.0 || p > 1.0 || n < 1.0 {
+        if !(0.0..=1.0).contains(&p) || n < 1.0 {
             return f64::NAN;
         }
 

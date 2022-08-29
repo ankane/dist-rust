@@ -90,7 +90,7 @@ impl Normal {
     // Algorithm AS 241: The Percentage Points of the Normal Distribution.
     // Journal of the Royal Statistical Society. Series C (Applied Statistics), 37(3), 477-484.
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
-        if p < 0.0 || p > 1.0 || std_dev <= 0.0 || mean.is_nan() || std_dev.is_nan() {
+        if !(0.0..=1.0).contains(&p) || std_dev <= 0.0 || mean.is_nan() || std_dev.is_nan() {
             return f64::NAN;
         }
 
@@ -117,11 +117,11 @@ impl Normal {
             let mut r = if q < 0.0 { p } else { 1.0 - p };
             r = (-(r.ln())).sqrt();
             if r < 5.0 {
-                r = r - 1.6;
+                r -= 1.6;
                 a = &C;
                 b = &D;
             } else {
-                r = r - 5.0;
+                r -= 5.0;
                 a = &E2;
                 b = &F;
             }
