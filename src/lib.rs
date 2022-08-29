@@ -5,7 +5,6 @@
 #![forbid(unsafe_code)]
 #![no_std]
 
-mod erf;
 mod normal;
 mod students_t;
 

@@ -8,7 +8,13 @@ impl StudentsT {
     pub fn pdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(n >= 1.0);
+        if n.is_nan() || n <= 0.0 {
+            return f64::NAN;
+        }
+
+        if n == f64::INFINITY {
+            return Normal::pdf(x, 0.0, 1.0);
+        }
 
         tgamma((n + 1.0) / 2.0) / (sqrt(n * PI) * tgamma(n / 2.0)) * pow(1.0 + x * x / n, -(n + 1.0) / 2.0)
     }
@@ -19,7 +25,22 @@ impl StudentsT {
     pub fn cdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(n >= 1.0);
+        // TODO support n > 0.0
+        if x.is_nan() || n.is_nan() || n < 1.0 {
+            return f64::NAN;
+        }
+
+        if x == f64::NEG_INFINITY {
+            return 0.0;
+        }
+
+        if x == f64::INFINITY {
+            return 1.0;
+        }
+
+        if n == f64::INFINITY {
+            return Normal::cdf(x, 0.0, 1.0);
+        }
 
         let (start, sign) = if x < 0.0 {
             (0.0, 1.0)
@@ -97,8 +118,14 @@ impl StudentsT {
     pub fn ppf<T: Into<f64>>(p: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(p >= 0.0 && p <= 1.0);
-        assert!(n >= 1.0);
+        // TODO support n > 0.0
+        if !(0.0..=1.0).contains(&p) || n < 1.0 {
+            return f64::NAN;
+        }
+
+        if n == f64::INFINITY {
+            return Normal::ppf(p, 0.0, 1.0);
+        }
 
         // distribution is symmetric
         let (sign, p) = if p < 0.5 {
@@ -160,8 +187,8 @@ mod tests {
 
     #[test]
     fn test_pdf_one() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.03183, 0.06366, 0.15915, 0.31831, 0.15915, 0.06366, 0.03183];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.03183, 0.06366, 0.15915, 0.31831, 0.15915, 0.06366, 0.03183, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 1), exp, 0.00001);
         }
@@ -169,8 +196,8 @@ mod tests {
 
     #[test]
     fn test_pdf_two() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.02741, 0.06804, 0.19245, 0.35355, 0.19245, 0.06804, 0.02741];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02741, 0.06804, 0.19245, 0.35355, 0.19245, 0.06804, 0.02741, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 2), exp, 0.00001);
         }
@@ -178,8 +205,8 @@ mod tests {
 
     #[test]
     fn test_pdf_thirty() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00678, 0.05685, 0.23799, 0.39563, 0.23799, 0.05685, 0.00678];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00678, 0.05685, 0.23799, 0.39563, 0.23799, 0.05685, 0.00678, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 30), exp, 0.00001);
         }
@@ -187,17 +214,46 @@ mod tests {
 
     #[test]
     fn test_pdf_non_integer() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02504, 0.06796, 0.2008, 0.36181, 0.2008, 0.06796, 0.02504, 0.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::pdf(*input, 2.5), exp, 0.00001);
         }
     }
 
     #[test]
+    fn test_pdf_infinity() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00443, 0.05399, 0.24197, 0.39894, 0.24197, 0.05399, 0.00443, 0.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::pdf(*input, INFINITY), exp, 0.00001);
+        }
+    }
+
+    #[test]
+    fn test_pdf_less_than_one() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.02963, 0.0519, 0.1183, 0.26968, 0.1183, 0.0519, 0.02963, 0.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::pdf(*input, 0.5), exp, 0.00001);
+        }
+    }
+
+    #[test]
+    fn test_pdf_nan() {
+        assert!(StudentsT::pdf(f64::NAN, 1).is_nan());
+        assert!(StudentsT::pdf(0.0, f64::NAN).is_nan());
+    }
+
+    #[test]
+    fn test_pdf_zero_n() {
+        assert!(StudentsT::pdf(0.5, 0).is_nan());
+    }
+
+    #[test]
     fn test_cdf_one() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.10242, 0.14758, 0.25, 0.5, 0.75, 0.85242, 0.89758, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 1), exp, 0.00001);
         }
@@ -205,8 +261,8 @@ mod tests {
 
     #[test]
     fn test_cdf_two() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.04773, 0.09175, 0.21132, 0.5, 0.78868, 0.90825, 0.95227];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.04773, 0.09175, 0.21132, 0.5, 0.78868, 0.90825, 0.95227, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2), exp, 0.00001);
         }
@@ -214,8 +270,8 @@ mod tests {
 
     #[test]
     fn test_cdf_thirty() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00269, 0.02731, 0.16265, 0.5, 0.83735, 0.97269, 0.99731, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 30), exp, 0.00001);
         }
@@ -223,11 +279,31 @@ mod tests {
 
     #[test]
     fn test_cdf_non_integer() {
-        let inputs = [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0];
-        let expected = [0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371];
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.03629, 0.0787, 0.20203, 0.5, 0.79797, 0.9213, 0.96371, 1.0];
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::cdf(*input, 2.5), exp, 0.00005);
         }
+    }
+
+    #[test]
+    fn test_cdf_infinity() {
+        let inputs = [NEG_INFINITY, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, INFINITY];
+        let expected = [0.0, 0.00135, 0.02275, 0.15866, 0.5, 0.84134, 0.97725, 0.99865, 1.0];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::cdf(*input, INFINITY), exp, 0.00001);
+        }
+    }
+
+    #[test]
+    fn test_cdf_nan() {
+        assert!(StudentsT::cdf(f64::NAN, 1.0).is_nan());
+        assert!(StudentsT::cdf(0.0, f64::NAN).is_nan());
+    }
+
+    #[test]
+    fn test_cdf_zero_n() {
+        assert!(StudentsT::cdf(0.5, 0).is_nan());
     }
 
     #[test]
@@ -253,7 +329,7 @@ mod tests {
         let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
         let expected = [NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
         for (input, exp) in inputs.iter().zip(expected) {
-            assert_in_delta(StudentsT::ppf(*input, 30), exp, 0.0002);
+            assert_in_delta(StudentsT::ppf(*input, 30), exp, 0.00001);
         }
     }
 
@@ -264,5 +340,30 @@ mod tests {
         for (input, exp) in inputs.iter().zip(expected) {
             assert_in_delta(StudentsT::ppf(*input, 2.5), exp, 0.0002);
         }
+    }
+
+    #[test]
+    fn test_ppf_infinity() {
+        let inputs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+        let expected = [NEG_INFINITY, -1.28155, -0.84162, -0.5244, -0.25335, 0.0, 0.25335, 0.5244, 0.84162, 1.28155, INFINITY];
+        for (input, exp) in inputs.iter().zip(expected) {
+            assert_in_delta(StudentsT::ppf(*input, INFINITY), exp, 0.00001);
+        }
+    }
+
+    #[test]
+    fn test_ppf_nan() {
+        assert!(StudentsT::ppf(f64::NAN, 1.0).is_nan());
+        assert!(StudentsT::ppf(0.5, f64::NAN).is_nan());
+    }
+
+    #[test]
+    fn test_ppf_negative_p() {
+        assert!(StudentsT::ppf(-1.0, 1).is_nan());
+    }
+
+    #[test]
+    fn test_ppf_zero_n() {
+        assert!(StudentsT::ppf(0.5, 0).is_nan());
     }
 }
