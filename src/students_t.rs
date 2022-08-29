@@ -8,7 +8,9 @@ impl StudentsT {
     pub fn pdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(n > 0.0);
+        if n.is_nan() || n <= 0.0 {
+            return f64::NAN;
+        }
 
         if n == f64::INFINITY {
             return Normal::pdf(x, 0.0, 1.0);
@@ -24,9 +26,7 @@ impl StudentsT {
         let n = n.into();
 
         // TODO support n > 0.0
-        assert!(n >= 1.0);
-
-        if x.is_nan() {
+        if x.is_nan() || n.is_nan() || n < 1.0 {
             return f64::NAN;
         }
 
@@ -114,9 +114,10 @@ impl StudentsT {
     pub fn ppf<T: Into<f64>>(p: f64, n: T) -> f64 {
         let n = n.into();
 
-        assert!(p >= 0.0 && p <= 1.0);
         // TODO support n > 0.0
-        assert!(n >= 1.0);
+        if p < 0.0 || p > 1.0 || n < 1.0 {
+            return f64::NAN;
+        }
 
         if n == f64::INFINITY {
             return Normal::ppf(p, 0.0, 1.0);
@@ -237,14 +238,12 @@ mod tests {
     #[test]
     fn test_pdf_nan() {
         assert!(StudentsT::pdf(f64::NAN, 1).is_nan());
-        // TODO uncomment in 0.2.0
-        // assert!(StudentsT::pdf(0.0, f64::NAN).is_nan());
+        assert!(StudentsT::pdf(0.0, f64::NAN).is_nan());
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: n > 0.0")]
     fn test_pdf_zero_n() {
-        StudentsT::pdf(0.5, 0);
+        assert!(StudentsT::pdf(0.5, 0).is_nan());
     }
 
     #[test]
@@ -295,14 +294,12 @@ mod tests {
     #[test]
     fn test_cdf_nan() {
         assert!(StudentsT::cdf(f64::NAN, 1.0).is_nan());
-        // TODO uncomment in 0.2.0
-        // assert!(StudentsT::cdf(0.0, f64::NAN).is_nan());
+        assert!(StudentsT::cdf(0.0, f64::NAN).is_nan());
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: n >= 1.0")]
     fn test_cdf_zero_n() {
-        StudentsT::cdf(0.5, 0);
+        assert!(StudentsT::cdf(0.5, 0).is_nan());
     }
 
     #[test]
@@ -351,14 +348,18 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
-    fn test_ppf_negative_p() {
-        StudentsT::ppf(-1.0, 1);
+    fn test_ppf_nan() {
+        assert!(StudentsT::ppf(f64::NAN, 1.0).is_nan());
+        assert!(StudentsT::ppf(0.5, f64::NAN).is_nan());
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: n >= 1.0")]
+    fn test_ppf_negative_p() {
+        assert!(StudentsT::ppf(-1.0, 1).is_nan());
+    }
+
+    #[test]
     fn test_ppf_zero_n() {
-        StudentsT::ppf(0.5, 0);
+        assert!(StudentsT::ppf(0.5, 0).is_nan());
     }
 }

@@ -1,6 +1,7 @@
 ## 0.2.0 (unreleased)
 
 - Improved accuracy of `Normal::ppf` and `StudentsT::ppf`
+- Return `NAN` instead of panicking for invalid inputs
 
 ## 0.1.3 (2022-07-31)
 

@@ -70,20 +70,18 @@ pub struct Normal;
 
 impl Normal {
     pub fn pdf(x: f64, mean: f64, std_dev: f64) -> f64 {
-        // TODO uncomment in 0.2.0
-        // if std_dev <= 0.0 {
-        //     return f64::NAN;
-        // }
+        if std_dev <= 0.0 {
+            return f64::NAN;
+        }
 
         let n = (x - mean) / std_dev;
         (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * n * n)
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
-        // TODO uncomment in 0.2.0
-        // if std_dev <= 0.0 {
-        //     return f64::NAN;
-        // }
+        if std_dev <= 0.0 {
+            return f64::NAN;
+        }
 
         0.5 * (1.0 + erf((x - mean) / (std_dev * SQRT_2)))
     }
@@ -92,13 +90,7 @@ impl Normal {
     // Algorithm AS 241: The Percentage Points of the Normal Distribution.
     // Journal of the Royal Statistical Society. Series C (Applied Statistics), 37(3), 477-484.
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
-        assert!(p >= 0.0 && p <= 1.0);
-        // TODO uncomment in 0.2.0
-        // if p < 0.0 || p > 1.0 || std_dev <= 0.0 {
-        //     return f64::NAN;
-        // }
-
-        if mean.is_nan() || std_dev.is_nan() {
+        if p < 0.0 || p > 1.0 || std_dev <= 0.0 || mean.is_nan() || std_dev.is_nan() {
             return f64::NAN;
         }
 
@@ -197,8 +189,7 @@ mod tests {
 
     #[test]
     fn test_pdf_negative_std_dev() {
-        // TODO return NAN in 0.2.0
-        assert!(Normal::pdf(0.0, 0.0, -1.0).is_sign_negative());
+        assert!(Normal::pdf(0.0, 0.0, -1.0).is_nan());
     }
 
     #[test]
@@ -244,8 +235,7 @@ mod tests {
 
     #[test]
     fn test_cdf_negative_std_dev() {
-        // TODO return NAN in 0.2.0
-        assert_in_delta(Normal::cdf(0.0, 0.0, -1.0), 0.5, 0.00001);
+        assert!(Normal::cdf(0.0, 0.0, -1.0).is_nan());
     }
 
     #[test]
@@ -276,28 +266,23 @@ mod tests {
 
     #[test]
     fn test_ppf_nan() {
-        // TODO uncomment in 0.2.0
-        // assert!(Normal::ppf(f64::NAN, 0.0, 1.0).is_nan());
+        assert!(Normal::ppf(f64::NAN, 0.0, 1.0).is_nan());
         assert!(Normal::ppf(0.0, f64::NAN, 1.0).is_nan());
         assert!(Normal::ppf(0.0, 0.0, f64::NAN).is_nan());
     }
 
     #[test]
-    #[should_panic(expected = "assertion failed: p >= 0.0 && p <= 1.0")]
     fn test_ppf_negative_p() {
-        // TODO return NAN in 0.2.0
-        Normal::ppf(-1.0, 0.0, 1.0);
+        assert!(Normal::ppf(-1.0, 0.0, 1.0).is_nan());
     }
 
     #[test]
     fn test_ppf_zero_std_dev() {
-        // TODO return NAN in 0.2.0
-        assert_in_delta(Normal::ppf(0.5, 0.0, 0.0), 0.0, 0.00001);
+        assert!(Normal::ppf(0.5, 0.0, 0.0).is_nan());
     }
 
     #[test]
     fn test_ppf_negative_std_dev() {
-        // TODO return NAN in 0.2.0
-        assert_in_delta(Normal::ppf(0.5, 0.0, -1.0), 0.0, 0.00001);
+        assert!(Normal::ppf(0.5, 0.0, -1.0).is_nan());
     }
 }
