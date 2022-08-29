@@ -30,8 +30,12 @@ impl StudentsT {
             return f64::NAN;
         }
 
-        if !x.is_finite() {
-            return if x < 0.0 { 0.0 } else { 1.0 };
+        if x == f64::NEG_INFINITY {
+            return 0.0;
+        }
+
+        if x == f64::INFINITY {
+            return 1.0;
         }
 
         if n == f64::INFINITY {
