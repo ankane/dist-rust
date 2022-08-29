@@ -41,7 +41,7 @@ StudentsT::ppf(p, df);
 
 ## References
 
-- [A handy approximation for the error function and its inverse](https://drive.google.com/file/d/0B2Mt7luZYBrwZlctV3A3eF82VGM/view?resourcekey=0-UQpPhwZgzP0sF4LHBDlLtg)
+- [Algorithm AS 241: The Percentage Points of the Normal Distribution](https://www.jstor.org/stable/2347330)
 - [Algorithm 395: Student’s t-distribution](https://dl.acm.org/doi/10.1145/355598.355599)
 - [Algorithm 396: Student’s t-quantiles](https://dl.acm.org/doi/10.1145/355598.355600)
 
