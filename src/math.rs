@@ -1,3 +1,5 @@
+#![allow(unsafe_code)]
+
 mod c {
     extern "C" {
         pub fn erf(x: f64) -> f64;
