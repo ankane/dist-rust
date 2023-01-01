@@ -2,6 +2,7 @@
 //!
 //! [View the docs](https://github.com/ankane/dist-rust)
 
+#![cfg_attr(feature = "libm", no_std)]
 #![cfg_attr(feature = "libm", forbid(unsafe_code))]
 #![cfg_attr(not(feature = "libm"), deny(unsafe_code))]
 

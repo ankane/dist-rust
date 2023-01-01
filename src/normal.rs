@@ -1,10 +1,10 @@
-use std::f64::consts::{E, PI, SQRT_2};
+use core::f64::consts::{E, PI, SQRT_2};
 
 #[cfg(feature = "libm")]
-use libm::erf;
+use libm::{fabs, erf, log, pow, sqrt};
 
 #[cfg(not(feature = "libm"))]
-use crate::math::erf;
+use crate::math::{fabs, erf, log, pow, sqrt};
 
 pub struct Normal;
 
@@ -15,7 +15,7 @@ impl Normal {
         }
 
         let n = (x - mean) / std_dev;
-        (1.0 / (std_dev * (2.0 * PI).sqrt())) * E.powf(-0.5 * n * n)
+        (1.0 / (std_dev * sqrt(2.0 * PI))) * pow(E, -0.5 * n * n)
     }
 
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
@@ -43,14 +43,14 @@ impl Normal {
         }
 
         let q = p - 0.5;
-        if q.abs() < 0.425 {
+        if fabs(q) < 0.425 {
             let r = 0.180625 - q * q;
             mean + std_dev * q *
                 (((((((2.5090809287301226727e3 * r + 3.3430575583588128105e4) * r + 6.7265770927008700853e4) * r + 4.5921953931549871457e4) * r + 1.3731693765509461125e4) * r + 1.9715909503065514427e3) * r + 1.3314166789178437745e2) * r + 3.3871328727963666080e0) /
                 (((((((5.2264952788528545610e3 * r + 2.8729085735721942674e4) * r + 3.9307895800092710610e4) * r + 2.1213794301586595867e4) * r + 5.3941960214247511077e3) * r + 6.8718700749205790830e2) * r + 4.2313330701600911252e1) * r + 1.0)
         } else {
             let mut r = if q < 0.0 { p } else { 1.0 - p };
-            r = (-(r.ln())).sqrt();
+            r = sqrt(-log(r));
             let sign = if q < 0.0 { -1.0 } else { 1.0 };
             if r < 5.0 {
                 r -= 1.6;
@@ -70,7 +70,7 @@ impl Normal {
 #[cfg(test)]
 mod tests {
     use super::Normal;
-    use std::f64::{INFINITY, NEG_INFINITY};
+    use core::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {

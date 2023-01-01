@@ -1,6 +1,6 @@
 ## 0.2.1 (unreleased)
 
-- Added `libm` feature
+- Added `libm` feature to support `no_std`
 
 ## 0.2.0 (2022-08-28)
 

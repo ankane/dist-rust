@@ -1,11 +1,11 @@
 use crate::Normal;
-use std::f64::consts::PI;
+use core::f64::consts::PI;
 
 #[cfg(feature = "libm")]
-use libm::tgamma;
+use libm::{atan, cos, exp, floor, log, pow, sin, sqrt, tgamma};
 
 #[cfg(not(feature = "libm"))]
-use crate::math::tgamma;
+use crate::math::{atan, cos, exp, floor, log, pow, sin, sqrt, tgamma};
 
 pub struct StudentsT;
 
@@ -21,7 +21,7 @@ impl StudentsT {
             return Normal::pdf(x, 0.0, 1.0);
         }
 
-        tgamma((n + 1.0) / 2.0) / ((n * PI).sqrt() * tgamma(n / 2.0)) * (1.0 + x * x / n).powf(-(n + 1.0) / 2.0)
+        tgamma((n + 1.0) / 2.0) / (sqrt(n * PI) * tgamma(n / 2.0)) * pow(1.0 + x * x / n, -(n + 1.0) / 2.0)
     }
 
     // Hill, G. W. (1970).
@@ -58,15 +58,15 @@ impl StudentsT {
         let mut y = t / n;
         let mut b = 1.0 + y;
 
-        if n > n.floor() || (n >= 20.0 && t < n) || n > 200.0 {
+        if n > floor(n) || (n >= 20.0 && t < n) || n > 200.0 {
             // asymptotic series for large or noninteger n
             if y > 10e-6 {
-                y = b.ln();
+                y = log(b);
             }
             let a = n - 0.5;
             b = 48.0 * a * a;
             y *= a;
-            y = (((((-0.4 * y - 3.3) * y - 24.0) * y - 85.5) / (0.8 * y * y + 100.0 + b) + y + 3.0) / b + 1.0) * y.sqrt();
+            y = (((((-0.4 * y - 3.3) * y - 24.0) * y - 85.5) / (0.8 * y * y + 100.0 + b) + y + 3.0) / b + 1.0) * sqrt(y);
             return start + sign * Normal::cdf(-y, 0.0, 1.0);
         }
 
@@ -76,7 +76,7 @@ impl StudentsT {
 
         if n < 20 && t < 4.0 {
             // nested summation of cosine series
-            y = y.sqrt();
+            y = sqrt(y);
             let mut a = y;
             if n == 1 {
                 a = 0.0;
@@ -90,12 +90,12 @@ impl StudentsT {
                     n -= 2;
                 }
             }
-            a = if n == 0 { a / b.sqrt() } else { (y.atan() + a / b) * (2.0 / PI) };
+            a = if n == 0 { a / sqrt(b) } else { (atan(y) + a / b) * (2.0 / PI) };
             return start + sign * (z - a) / 2.0;
         }
 
         // tail series expanation for large t-values
-        let mut a = b.sqrt();
+        let mut a = sqrt(b);
         y = a * n as f64;
         let mut j = 0;
         while a != z {
@@ -113,7 +113,7 @@ impl StudentsT {
             a = (n - 1) as f64 / (b * n as f64) * a + y;
             n -= 2;
         }
-        a = if n == 0 { a / b.sqrt() } else { (y.atan() + a / b) * (2.0 / PI) };
+        a = if n == 0 { a / sqrt(b) } else { (atan(y) + a / b) * (2.0 / PI) };
         start + sign * (z - a) / 2.0
     }
 
@@ -143,22 +143,22 @@ impl StudentsT {
         let p = 2.0 * (1.0 - p);
 
         if n == 2.0 {
-            return sign * (2.0 / (p * (2.0 - p)) - 2.0).sqrt();
+            return sign * sqrt(2.0 / (p * (2.0 - p)) - 2.0);
         }
 
         let half_pi = PI / 2.0;
 
         if n == 1.0 {
             let p = p * half_pi;
-            return sign * p.cos() / p.sin();
+            return sign * cos(p) / sin(p);
         }
 
         let a = 1.0 / (n - 0.5);
         let b = 48.0 / (a * a);
         let mut c = ((20700.0 * a / b - 98.0) * a - 16.0) * a + 96.36;
-        let d = ((94.5 / (b + c) - 3.0) / b + 1.0) * (a * half_pi).sqrt() * n;
+        let d = ((94.5 / (b + c) - 3.0) / b + 1.0) * sqrt(a * half_pi) * n;
         let mut x = d * p;
-        let mut y = x.powf(2.0 / n);
+        let mut y = pow(x, 2.0 / n);
         if y > 0.05 + a {
             // asymptotic inverse expansion about normal
             x = Normal::ppf(p * 0.5, 0.0, 1.0);
@@ -169,18 +169,18 @@ impl StudentsT {
             c += (((0.05 * d * x - 5.0) * x - 7.0) * x - 2.0) * x + b;
             y = (((((0.4 * y + 6.3) * y + 36.0) * y + 94.5) / c - y - 3.0) / b + 1.0) * x;
             y = a * y * y;
-            y = if y > 0.002 { y.exp() - 1.0 } else { 0.5 * y * y + y };
+            y = if y > 0.002 { exp(y) - 1.0 } else { 0.5 * y * y + y };
         } else {
             y = ((1.0 / (((n + 6.0) / (n * y) - 0.089 * d - 0.822) * (n + 2.0) * 3.0) + 0.5 / (n + 4.0)) * y - 1.0) * (n + 1.0) / (n + 2.0) + 1.0 / y;
         }
-        sign * (n * y).sqrt()
+        sign * sqrt(n * y)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::StudentsT;
-    use std::f64::{INFINITY, NEG_INFINITY};
+    use core::f64::{INFINITY, NEG_INFINITY};
 
     fn assert_in_delta(act: f64, exp: f64, delta: f64) {
         if exp.is_finite() {
