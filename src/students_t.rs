@@ -1,6 +1,11 @@
-use crate::math::tgamma;
 use crate::Normal;
 use std::f64::consts::PI;
+
+#[cfg(feature = "libm")]
+use libm::tgamma;
+
+#[cfg(not(feature = "libm"))]
+use crate::math::tgamma;
 
 pub struct StudentsT;
 

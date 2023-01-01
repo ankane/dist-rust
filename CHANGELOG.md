@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Added `libm` feature
+
 ## 0.2.0 (2022-08-28)
 
 - Improved accuracy of `Normal::ppf` and `StudentsT::ppf`

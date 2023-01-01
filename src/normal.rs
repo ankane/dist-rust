@@ -1,5 +1,10 @@
-use crate::math::erf;
 use std::f64::consts::{E, PI, SQRT_2};
+
+#[cfg(feature = "libm")]
+use libm::erf;
+
+#[cfg(not(feature = "libm"))]
+use crate::math::erf;
 
 pub struct Normal;
 
