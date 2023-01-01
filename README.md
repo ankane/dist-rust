@@ -41,7 +41,7 @@ StudentsT::ppf(p, df);
 
 ## Features
 
-- `no_std` - enable `no_std` support (requires [libm](https://github.com/rust-lang/libm)) [unreleased]
+- `no_std` - enable `no_std` support (requires [libm](https://github.com/rust-lang/libm))
 
 ## References
 

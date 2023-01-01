@@ -1,4 +1,4 @@
-## 0.2.1 (unreleased)
+## 0.2.1 (2023-01-01)
 
 - Added `no_std` feature
 
