@@ -1,9 +1,4 @@
 use core::f64::consts::{E, PI, SQRT_2};
-
-#[cfg(feature = "no_std")]
-use libm::{erf, fabs, log, pow, sqrt};
-
-#[cfg(not(feature = "no_std"))]
 use crate::math::{erf, fabs, log, pow, sqrt};
 
 pub struct Normal;

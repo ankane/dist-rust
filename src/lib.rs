@@ -9,6 +9,9 @@
 mod normal;
 mod students_t;
 
+#[cfg(feature = "no_std")]
+use libm as math;
+
 #[cfg(not(feature = "no_std"))]
 mod math;
 
