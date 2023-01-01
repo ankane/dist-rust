@@ -1,10 +1,10 @@
 use core::f64::consts::{E, PI, SQRT_2};
 
 #[cfg(feature = "libm")]
-use libm::{fabs, erf, log, pow, sqrt};
+use libm::{erf, fabs, log, pow, sqrt};
 
 #[cfg(not(feature = "libm"))]
-use crate::math::{fabs, erf, log, pow, sqrt};
+use crate::math::{erf, fabs, log, pow, sqrt};
 
 pub struct Normal;
 
