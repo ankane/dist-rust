@@ -39,6 +39,10 @@ StudentsT::cdf(x, df);
 StudentsT::ppf(p, df);
 ```
 
+## Features
+
+- `no_std` - enable `no_std` support (requires [libm](https://github.com/rust-lang/libm)) [unreleased]
+
 ## References
 
 - [Algorithm AS 241: The Percentage Points of the Normal Distribution](https://www.jstor.org/stable/2347330)

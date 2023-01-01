@@ -1,10 +1,10 @@
 use crate::Normal;
 use core::f64::consts::PI;
 
-#[cfg(feature = "libm")]
+#[cfg(feature = "no_std")]
 use libm::{atan, cos, exp, floor, log, pow, sin, sqrt, tgamma};
 
-#[cfg(not(feature = "libm"))]
+#[cfg(not(feature = "no_std"))]
 use crate::math::{atan, cos, exp, floor, log, pow, sin, sqrt, tgamma};
 
 pub struct StudentsT;

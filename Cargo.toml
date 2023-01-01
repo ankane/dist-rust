@@ -12,3 +12,6 @@ readme = "README.md"
 
 [dependencies]
 libm = { version = "0.2", optional = true }
+
+[features]
+no_std = ["libm"]
