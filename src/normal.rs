@@ -24,6 +24,7 @@ impl Normal {
     // Wichura, M. J. (1988).
     // Algorithm AS 241: The Percentage Points of the Normal Distribution.
     // Journal of the Royal Statistical Society. Series C (Applied Statistics), 37(3), 477-484.
+    #[allow(clippy::excessive_precision)]
     pub fn ppf(p: f64, mean: f64, std_dev: f64) -> f64 {
         if !(0.0..=1.0).contains(&p) || std_dev <= 0.0 || mean.is_nan() || std_dev.is_nan() {
             return f64::NAN;
