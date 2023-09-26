@@ -4,6 +4,7 @@ use crate::math::{erf, fabs, log, pow, sqrt};
 pub struct Normal;
 
 impl Normal {
+    /// Returns the probability density function (PDF) of the normal distribution.
     pub fn pdf(x: f64, mean: f64, std_dev: f64) -> f64 {
         if std_dev <= 0.0 {
             return f64::NAN;
@@ -13,6 +14,7 @@ impl Normal {
         (1.0 / (std_dev * sqrt(2.0 * PI))) * pow(E, -0.5 * n * n)
     }
 
+    /// Returns the cumulative distribution function (CDF) of the normal distribution.
     pub fn cdf(x: f64, mean: f64, std_dev: f64) -> f64 {
         if std_dev <= 0.0 {
             return f64::NAN;
@@ -21,6 +23,7 @@ impl Normal {
         0.5 * (1.0 + erf((x - mean) / (std_dev * SQRT_2)))
     }
 
+    /// Returns the percent-point/quantile function (PPF) of the normal distribution.
     // Wichura, M. J. (1988).
     // Algorithm AS 241: The Percentage Points of the Normal Distribution.
     // Journal of the Royal Statistical Society. Series C (Applied Statistics), 37(3), 477-484.

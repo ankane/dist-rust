@@ -5,6 +5,7 @@ use crate::Normal;
 pub struct StudentsT;
 
 impl StudentsT {
+    /// Returns the probability density function (PDF) of the Student's t distribution.
     pub fn pdf<T: Into<f64>>(x: f64, n: T) -> f64 {
         let n = n.into();
 
@@ -19,6 +20,7 @@ impl StudentsT {
         tgamma((n + 1.0) / 2.0) / (sqrt(n * PI) * tgamma(n / 2.0)) * pow(1.0 + x * x / n, -(n + 1.0) / 2.0)
     }
 
+    /// Returns the cumulative distribution function (CDF) of the Student's t distribution.
     // Hill, G. W. (1970).
     // Algorithm 395: Student's t-distribution.
     // Communications of the ACM, 13(10), 617-619.
@@ -112,6 +114,7 @@ impl StudentsT {
         start + sign * (z - a) / 2.0
     }
 
+    /// Returns the percent-point/quantile function (PPF) of the Student's t distribution.
     // Hill, G. W. (1970).
     // Algorithm 396: Student's t-quantiles.
     // Communications of the ACM, 13(10), 619-620.
