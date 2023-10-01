@@ -2,6 +2,7 @@ use core::f64::consts::PI;
 use crate::math::{atan, cos, exp, floor, log, pow, sin, sqrt, tgamma};
 use crate::Normal;
 
+/// The Student's t distribution.
 pub struct StudentsT;
 
 impl StudentsT {

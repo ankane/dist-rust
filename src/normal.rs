@@ -1,6 +1,7 @@
 use core::f64::consts::{E, PI, SQRT_2};
 use crate::math::{erf, fabs, log, pow, sqrt};
 
+/// The normal distribution.
 pub struct Normal;
 
 impl Normal {
