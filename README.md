@@ -4,7 +4,7 @@ PDF, CDF, and percent-point/quantile functions for the normal and Student’s t 
 
 🎉 Zero dependencies
 
-[![Build Status](https://github.com/ankane/dist-rust/workflows/build/badge.svg?branch=master)](https://github.com/ankane/dist-rust/actions)
+[![Build Status](https://github.com/ankane/dist-rust/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/dist-rust/actions)
 
 ## Installation
 
