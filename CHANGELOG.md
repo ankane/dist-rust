@@ -1,3 +1,7 @@
+## 0.2.2 (2024-06-30)
+
+- Improved docs
+
 ## 0.2.1 (2023-01-01)
 
 - Added `no_std` feature
