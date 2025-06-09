@@ -98,7 +98,7 @@ impl StudentsT {
             return start + sign * (z - a) / 2.0;
         }
 
-        // tail series expanation for large t-values
+        // tail series expansion for large t-values
         let mut a = sqrt(b);
         y = a * n as f64;
         let mut j = 0;
