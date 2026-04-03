@@ -1,5 +1,6 @@
-#![allow(unsafe_code)]
+#![cfg_attr(not(feature = "nightly"), allow(unsafe_code))]
 
+#[cfg(not(feature = "nightly"))]
 mod c {
     extern "C" {
         pub fn erf(x: f64) -> f64;
@@ -17,6 +18,13 @@ pub fn cos(x: f64) -> f64 {
     x.cos()
 }
 
+#[cfg(feature = "nightly")]
+#[inline]
+pub fn erf(x: f64) -> f64 {
+    x.erf()
+}
+
+#[cfg(not(feature = "nightly"))]
 #[inline]
 pub fn erf(x: f64) -> f64 {
     unsafe { c::erf(x) }
@@ -57,6 +65,13 @@ pub fn sqrt(x: f64) -> f64 {
     x.sqrt()
 }
 
+#[cfg(feature = "nightly")]
+#[inline]
+pub fn tgamma(x: f64) -> f64 {
+    x.gamma()
+}
+
+#[cfg(not(feature = "nightly"))]
 #[inline]
 pub fn tgamma(x: f64) -> f64 {
     unsafe { c::tgamma(x) }

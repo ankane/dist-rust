@@ -1,3 +1,7 @@
+## 0.2.3 (unreleased)
+
+- Added experimental `nightly` feature
+
 ## 0.2.2 (2024-06-30)
 
 - Improved docs

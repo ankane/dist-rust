@@ -15,4 +15,5 @@ doctest = false
 libm = { version = "0.2", optional = true }
 
 [features]
+nightly = []
 no_std = ["libm"]
