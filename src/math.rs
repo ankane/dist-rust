@@ -1,5 +1,3 @@
-#![cfg_attr(not(feature = "nightly"), allow(unsafe_code))]
-
 #[cfg(not(feature = "nightly"))]
 mod c {
     extern "C" {
