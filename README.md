@@ -24,9 +24,9 @@ distrs = "0.2"
 ```rust
 use distrs::Normal;
 
-Normal::pdf(x, mean, std_dev);
-Normal::cdf(x, mean, std_dev);
-Normal::ppf(p, mean, std_dev);
+let pdf = Normal::pdf(x, mean, std_dev);
+let cdf = Normal::cdf(x, mean, std_dev);
+let ppf = Normal::ppf(p, mean, std_dev);
 ```
 
 ### Student’s t
@@ -34,9 +34,9 @@ Normal::ppf(p, mean, std_dev);
 ```rust
 use distrs::StudentsT;
 
-StudentsT::pdf(x, df);
-StudentsT::cdf(x, df);
-StudentsT::ppf(p, df);
+let pdf = StudentsT::pdf(x, df);
+let cdf = StudentsT::cdf(x, df);
+let ppf = StudentsT::ppf(p, df);
 ```
 
 ## Features
