@@ -1,6 +1,6 @@
 [package]
 name = "distrs"
-version = "0.2.2"
+version = "0.2.3"
 description = "PDF, CDF, and percent-point/quantile functions for the normal and Student’s t distributions"
 repository = "https://github.com/ankane/dist-rust"
 license = "Unlicense OR MIT"
